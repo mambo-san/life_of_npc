@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1bc4acuqqx2h"]
+
+[ext_resource type="Script" path="res://Scene/cucumber.gd" id="1_0euwy"]
+[ext_resource type="Texture2D" uid="uid://wsjqrwiw76mx" path="res://art/tilemap_packed.png" id="1_kr4dp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oyc1s"]
+height = 40.0
+
+[node name="Cucumber" type="Node2D"]
+script = ExtResource("1_0euwy")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 8
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_oyc1s")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_kr4dp")
+region_enabled = true
+region_rect = Rect2(589, 336, 19, 42)

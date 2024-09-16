@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7t8h245gqdns"]
+
+[ext_resource type="Script" path="res://Scene/speech_bubble.gd" id="1_y77fi"]
+
+[node name="SpeechBubble" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1150.0
+offset_bottom = 642.0
+script = ExtResource("1_y77fi")
+
+[node name="Speech_background_color" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0.681094, 0.381511, 0.792296, 0.509804)
+
+[node name="TextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -547.0
+offset_top = 50.0
+offset_right = 547.0
+offset_bottom = 566.0
+grow_horizontal = 2
+theme_override_constants/line_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 0

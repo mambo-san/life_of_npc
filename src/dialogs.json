@@ -1,0 +1,91 @@
+{
+	"no_text_not_found_404": {
+		"text":[
+		"[color=Pink]Developer was too lazy to write dialog for this event.[/color]"],
+		"color_background": "FFFFFFFF"
+	},
+	"exit_speech_trigger": {
+		"text":[
+			"[color=Crimson]Hold up!  Hold up![/color]
+			Only ghosts can access negative X position.
+			If you were thinking of jumping... 
+			Visit [color=Cornflowerblue ]https://findahelpline.com[/color]"],
+		"color_background": "ae61ca82",
+	},
+	"home_dialog_trigger": {
+		"text": [
+			"My NPC home that I've been assigned. ",
+			"Home sweet NPC home.",
+			"NPC home doesn't even get a working door."
+			],
+		"color_background": "45b9687d",
+	},
+	"bored_dialog_trigger": {
+		"text": [
+			"Life of an NPC isn't that bad...",
+			"What to do today...",
+			"No player in sight..."
+			],
+		"color_background": "45b9687d"
+	},
+	"reached_wall_dialog_trigger": {
+		"text": [
+			"This is the NPC boundry that I've been assigned.
+			I guess I better get home befor player finds me.",
+			],
+		"color_background": "45b9687d"
+	},
+	"first_item_dialog_trigger": {
+		"text": [
+			"Oh! That's [i]Cuibensis Mushroom[/i]!
+			Legend has it that it grants NPCs the freedom to reach the Candy Mountain.",
+			],
+		"color_background": "45b9687d"
+	},
+	"second_item_dialog_trigger": {
+		"text": [
+			"Yo! I've never seen the roof of my house!",
+			"That was strange... 
+			Let's try that again...",
+			"Taste like rubber but I need see if Candy Mountain is real...",
+			],
+		"color_background": "45b9687d"
+	},
+	"first_item_effect": {
+		"text": [
+			"I don't feel anything...",
+			"Lengend my ass...",
+			"...Oh?", 
+			"Dude..."
+			],
+		"color_background": "45b9687d"
+	},
+	"ghost_trigger": {
+		"text": [
+			"[shake rate=20.0 level=5 connected=1]Don't do it! You are too young![/shake]",
+			"[shake rate=20.0 level=5 connected=1]Hey...you can see me!?[/shake]",
+			"[shake rate=20.0 level=5 connected=1]Being NPC is better than becoming a RAM ghost![/shake]", 
+			"[shake rate=20.0 level=5 connected=1]I've been scentenced to 2>/dev/null[/shake]",
+			"[shake rate=20.0 level=5 connected=1]This isn't the exit you are looking for![/shake]"
+			],
+		"color_background": "00000080"
+	},
+	"end_dialog_1": {
+		"text": ["Made it!!"],
+		"color_background": "45b9687d"
+	},
+	"end_dialog_2": {
+		"text": ["...is NPC allowed to be here?"],
+		"color_background": "45b9687d"
+	},
+	"end_dialog_3": {
+		"text": ["Meh...I'm just a NPC anyway."],
+		"color_background": "45b9687d"
+	},
+	"end_dialog_4": {
+		"text": ["The world is your oyster sauce!
+		...someone once said...
+		What could possibly go wrong!"],
+		"color_background": "45b9687d"
+	}
+}

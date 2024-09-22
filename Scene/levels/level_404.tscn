@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=4 uid="uid://dby6t8wf654fs"]
+
+[ext_resource type="PackedScene" uid="uid://clac83246xe8i" path="res://Scene/tile_map.tscn" id="1_2knuw"]
+[ext_resource type="PackedScene" uid="uid://kr0pjxvgycan" path="res://Scene/player.tscn" id="2_k0bdy"]
+
+[node name="Stage_404" type="Node2D"]
+
+[node name="foreground" parent="." instance=ExtResource("1_2knuw")]
+z_index = 1
+tile_map_data = PackedByteArray("AAABAAYAAAAQABQAAAADAAYAAAAQABQAAAAFAAYAAAAQABQAAAAHAAYAAAAQABQAAAAJAAYAAAAQABQAAAALAAYAAAAQABQAAAANAAYAAAAQABQAAAA=")
+
+[node name="background" parent="." instance=ExtResource("1_2knuw")]
+tile_map_data = PackedByteArray("AAAAAAAAAAAcABUAAAAAAAEAAAAcABUAAAAAAAIAAAAcABUAAAAAAAMAAAAcABUAAAAAAAQAAAAcABUAAAAAAAUAAAAcABUAAAAAAAYAAAAcABUAAAAAAAcAAAAcABUAAAABAAcAAAAcABUAAAACAAcAAAAcABUAAAADAAcAAAAcABUAAAAEAAcAAAAcABUAAAAFAAcAAAAcABUAAAAGAAcAAAAcABUAAAAHAAcAAAAcABUAAAAIAAcAAAAcABUAAAAJAAcAAAAcABUAAAAKAAcAAAAcABUAAAALAAcAAAAcABUAAAAMAAcAAAAcABUAAAAOAAcAAAAcABUAAAANAAcAAAAcABUAAAAOAAYAAAAcABUAAAAOAAUAAAAcABUAAAAOAAQAAAAcABUAAAAOAAMAAAAcABUAAAAOAAIAAAAcABUAAAAOAAEAAAAcABUAAAAOAAAAAAAcABUAAAAEAAYAAAAQABQAAAACAAYAAAAQABQAAAAGAAYAAAAQABQAAAAIAAYAAAAQABQAAAAKAAYAAAAQABQAAAAMAAYAAAAQABQAAAA=")
+
+[node name="player" parent="." instance=ExtResource("2_k0bdy")]
+position = Vector2(155, -129)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(157, 88)
+zoom = Vector2(3.64, 3.64)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 41.0
+offset_top = 15.0
+offset_right = 312.0
+offset_bottom = 85.0
+text = "404 - Level under construction"

@@ -17,7 +17,7 @@ func _ready():
 
 func set_player(player_node):
 	player = player_node
-	emit_signal("player_ready")
+	player_ready.emit()
 
 func play_music(sound_name: String):
 	sound_manager.changeMusic(sound_name)
@@ -44,7 +44,10 @@ func debug(message:String):
 		debug_message.z_index = 1
 		
 		$debug_collection.call_deferred("add_child",debug_message)
-	print(message)
+	if OS.has_feature("standalone"): #running as exported build
+		pass
+	else:#We are in editor, print to consoled
+		print(message)
 
 func set_debug_mode(debug_mode: bool) -> void:
 	_on_screen_debug_mode = debug_mode

@@ -1,86 +1,118 @@
 extends Node2D
 
+const floor_scene = "res://Scene/levels/floor.tscn"
+var floor_res
+var player
+var floor_created : Array[int]
+var tile_size
+const floor_base_y := 405.0
 
-#This script/node is responsible for story progression.
-#E.g. Listen to events from variaous acitivity, enable various nodes
-var player_reached_wall = false
-var player_ate_first_item = false
-var shroom_1
-var shroom_2
-var first_item_dialog: Area2D
-var second_item_dialog_2: Area2D
-var home_dialog: Area2D
-var second_shrm_pos = Vector2(220,-40)
+#camera stuff
+const MAX_zoom = 13.0
+const MIN_zoom = 1.0
+var current_zoom = MAX_zoom
 
-func _ready():
-	first_item_dialog = $Speech_triggers/first_item_dialog_trigger
-	second_item_dialog_2 = $Speech_triggers/second_item_dialog_trigger
-	home_dialog = $Speech_triggers/home_dialog_trigger
-	#stage setup
-	first_item_dialog.monitoring = false
-	second_item_dialog_2.monitoring = false
-	#Set shroom property and connect to stage 1 specific magical function
-	shroom_1 = $Items/Shroom_1
-	shroom_1.respawn_rate = 20
-	shroom_1.delayed_onset = 12
-	shroom_1.player_ate_something.connect(player_picked_up_item)
-	shroom_1.visible = false #Hiding but can still collide
-	shroom_2 = $Items/Shroom_2
-	shroom_2.respawn_rate = 10
-	shroom_2.visible = false #Hiding but can still collide
-	shroom_2.player_ate_something.connect(player_picked_up_item)
-	#Make the player 
-	Global.player.get_node("PickUpRange").monitoring = true #TODO set thsi to false for PROD
-	Global.player.effect_over.connect(_player_effect_over)
-	Global.play_music("BGM")
+@export var exit_left :Area2D
+@export var exit_right :Area2D
 
-func _on_reached_wall_dialog_trigger_body_entered(_body):
-	if not player_reached_wall:
-		player_reached_wall = true
-		#Enable/Disable some dialogs
-		first_item_dialog.set_deferred("monitoring",true)
-		home_dialog.set_deferred("monitoring", false)
-		#Add shroom in front of the house and on top
-		call_deferred("place_shrooms")
-		#Player can now interact with items
-		Global.player.get_node("PickUpRange").monitoring = true
+signal ui_accept_pressed
+#TODO hack to supress player control for exit scene
+var input_left_event = InputMap.action_get_events("walk_left")
+var input_right_event = InputMap.action_get_events("walk_right")
 
-func place_shrooms():
-	shroom_1.visible = true
-	shroom_2.visible = true
+func _ready() -> void:
+	print("_ready level 1 start")
+	set_process(false)
+	#Get the player instance and freeze until dialog is complete
+	if not Global.player:
+		await Global.player_ready
+	player = Global.player
+	player.set_process(false)
+	# Preload moving floor (and add the first one)
+	floor_res = preload(floor_scene)
+	var x_int = int(player.global_position.x / 10)
+	var floor = floor_res.instantiate()
+	floor.position = Vector2(x_int * 10,floor_base_y)
+	add_child(floor)
+	floor_created.append(x_int)
+	# Dialog
+	await get_tree().create_timer(3).timeout
+	set_process(true)
+	for i in range(0, 2):
+		_show_dialog("time_for_work", i)
+		await ui_accept_pressed
+	_hide_dialog()
+	_toggle_progress_bar(true)
+	##End of dialog, enable player movement 
+	player.set_process(true)
 	
-func player_picked_up_item(_item, _delay_onset):
+	print("_ready level 1 end")
 	
-	if not player_ate_first_item:
-		Global.debug("Set player_ate_first_item to true")
-		player_ate_first_item = true
-		shroom_1.respawn_rate = 10
-		shroom_1.delayed_onset = 1
-		first_item_dialog.monitoring= false
-		#Display NPC comment on the effect
-		for i in range(3):
-			await get_tree().create_timer(4).timeout
-			$HUD_canvas.enable_dialog_with_index("first_item_effect", i)
-		#Hack to play music as shroom effects kick in
-		get_tree().create_timer(3).timeout.connect(first_shroom_dialog)
-	#Handle music
-	Global.play_music("Chill_music")
-	#Set on screen dubug mode on
-	Global.set_debug_mode(true)
 
-func first_shroom_dialog():
-	Global.set_debug_mode(true)
-	$HUD_canvas.enable_dialog_with_index("first_item_effect",3)
-	await get_tree().create_timer(5).timeout
-	$HUD_canvas.disable_dialog()
-	await get_tree().create_timer(2).timeout
-	second_item_dialog_2.monitoring = true
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept"):
+		ui_accept_pressed.emit()
 
-func _on_stage_exit_area_body_entered(_body):
-	###Implement game ending
-	pass # Replace with function body.
+func _process(delta: float) -> void:
+	var player_x = player.global_position.x
+	var x_int = int(player_x / 10)
+	
+	for index in range(max(x_int-5, -100), min(x_int+6, 101)):
+		if not floor_created.has(index):
+			var floor = floor_res.instantiate()
+			floor.position = Vector2(index * 10,floor_base_y)
+			add_child(floor)
+			floor_created.append(index)
+	var progress = abs(player_x / 10)
+	$UILayer/ProgressBar.value = progress
+	var new_zoom = clamp(lerpf(MAX_zoom, MIN_zoom, progress/90), MIN_zoom, current_zoom)
+	current_zoom = new_zoom
+	$player/Camera2D.set_zoom(Vector2(new_zoom,new_zoom))
 
-func _player_effect_over():
-	if $walls/SuicidePreventionWall/CollisionShape2D.disabled:
-		Global.play_music("BGM")
-		Global.set_debug_mode(false)
+func _show_dialog(dialog_key: String, index: int=-1) -> void:
+	var dialog_data = DialogTexts.get_dialog_text(dialog_key, index)
+	$UILayer/DialogPanel.set_dialog_animation(dialog_data)
+	$UILayer/DialogPanel.visible = true
+
+func _hide_dialog() ->void:
+	$UILayer/DialogPanel.visible = false
+	
+func _toggle_progress_bar(flag: bool) ->void:
+	if flag == true: 
+		$UILayer/ProgressBar.visible = true
+		$UILayer/ProgressBar.modulate.a = 1.0
+	else:
+		var tween = $UILayer/ProgressBar.create_tween()
+		tween.tween_property($UILayer/ProgressBar, "modulate:a", 0.0, 2)
+
+func _on_exit_right_body_entered(body: Node2D) -> void:
+	print("Triggered Right exit")
+	Input.action_press("walk_right")
+	_exit_sequence()
+
+func _on_exit_left_body_entered(body: Node2D) -> void:
+	print("Triggered Left exit")
+	Input.action_press("walk_left")
+	_exit_sequence()
+
+func _exit_sequence():
+	_toggle_player_movement(false)
+	_toggle_progress_bar(false)
+	$UILayer/Animation.play("fade_out")
+
+func _toggle_player_movement(enable:bool):
+	if enable:
+		for event in input_left_event:
+			InputMap.action_add_event("walk_left", event)
+		for event in input_right_event:
+			InputMap.action_add_event("walk_right", event)
+		Input.action_release("walk_left")
+		Input.action_release("walk_right")
+	else:
+		InputMap.action_erase_events("walk_left")
+		InputMap.action_erase_events("walk_right")
+
+func _on_animation_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "fade_out":
+		_toggle_player_movement(true)
+		get_tree().root.get_node("/root/Main").load_next_level()

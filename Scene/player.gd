@@ -147,7 +147,7 @@ func spew():
 	await get_tree().create_timer(1.2).timeout
 	Global.debug("Spewing stomach content")
 	for index in stomach.size():
-		var item_scene = stomach[-1-index]
+		var item_scene = stomach.pop_back()
 		var item = item_scene.instantiate()
 		Global.debug("Stomach_content[" + str(index) + "]=" + str(item.name))
 		item.position.x = position.x + (5*last_direction)

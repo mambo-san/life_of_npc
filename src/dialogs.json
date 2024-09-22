@@ -4,6 +4,14 @@
 		"[color=Pink]Developer was too lazy to write dialog for this event.[/color]"],
 		"color_background": "FFFFFFFF"
 	},
+	"time_for_work": {
+		"text": [
+			"[shake rate=20.0 level=5 connected=1]Testing, testing...1, 2, 1, 2. Can you hear this?[/shake]",
+			"[shake rate=20.0 level=5 connected=1]NPC #32767, you're late! 
+			Get to your designated NPC home in Mapletown before the player arrives![/shake]",
+			],
+		"color_background": "00000080"
+	},
 	"exit_speech_trigger": {
 		"text":[
 			"[color=Crimson]Hold up!  Hold up![/color]

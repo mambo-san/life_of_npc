@@ -1,7 +1,7 @@
 extends Node
 
 #Use this script to translate e.g. initialize locale variable and modify JSON structure
-const DIALOG_FILE_PATH = "src/dialogs.json"
+const DIALOG_FILE_PATH = "res://src/dialogs.json"
 const TAG_BACKGROUND_COLOR = "color_background"
 const TAG_TEXT = "text"
 var dialog_dict

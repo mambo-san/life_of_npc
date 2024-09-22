@@ -14,8 +14,8 @@ height = 46.0
 collision_layer = 0
 physics_material_override = SubResource("PhysicsMaterial_urdsx")
 gravity_scale = 0.0
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_5eavs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
